@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vite App</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
+
+<style>
+
+  body {
+    --sb-track-color: #ffffff;
+    --sb-thumb-color: #e4e4e4;
+    --sb-size: 1px;
+    background:
+  linear-gradient(
+    to bottom right,
+    hsl(0, 0%, 100%) 0%,
+    hsl(188.04, 68.64%, 99.62%) 8.1%,
+    hsl(187.99, 68.83%, 98.54%) 15.5%,
+    hsl(187.9, 69.15%, 96.84%) 22.5%,
+    hsl(187.79, 69.58%, 94.58%) 29%,
+    hsl(187.64, 70.12%, 91.81%) 35.3%,
+    hsl(187.46, 70.77%, 88.58%) 41.2%,
+    hsl(187.25, 71.54%, 84.93%) 47.1%,
+    hsl(187, 72.41%, 80.91%) 52.9%,
+    hsl(186.72, 73.41%, 76.55%) 58.8%,
+    hsl(186.39, 74.53%, 71.88%) 64.7%,
+    hsl(186.03, 75.78%, 66.94%) 71%,
+    hsl(185.62, 77.16%, 61.76%) 77.5%,
+    hsl(185.18, 78.68%, 56.37%) 84.5%,
+    hsl(184.69, 80.34%, 50.81%) 91.9%,
+    hsl(184.17, 100%, 45.1%) 100%
+  );
+  }
+  
+  body::-webkit-scrollbar {
+    width: var(--sb-size)
+  }
+  
+  body::-webkit-scrollbar-track {
+    background: var(--sb-track-color);
+    border-radius: 1px;
+  }
+  
+  body::-webkit-scrollbar-thumb {
+    background: var(--sb-thumb-color);
+    border-radius: 1px;
+    
+  }
+  
+  @supports not selector(::-webkit-scrollbar) {
+    body {
+      scrollbar-color: var(--sb-thumb-color)
+                       var(--sb-track-color);
+    }
+  }
+</style>
