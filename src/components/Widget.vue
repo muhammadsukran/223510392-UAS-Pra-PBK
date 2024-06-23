@@ -63,97 +63,94 @@
   </q-page>
 </template>
 
-<script>
-import axios from 'axios'
-import Swal from 'sweetalert2'
+<script setup>
+import { ref } from 'vue';
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
-export default {
-  data() {
-    return {
-      location: '',
-      showInput: true,
-      showHistory: false,
-      history: JSON.parse(localStorage.getItem('weatherHistory')) || []
-    }
-  },
-  methods: {
-    async getWeather() {
-      const apiKey = 'e6cdf6e8e4191928c1ca1dce33282002'
-      const url = `https://api.openweathermap.org/data/2.5/weather?q=${this.location}&appid=${apiKey}&units=metric`
-      try {
-        const response = await axios.get(url)
-        const data = response.data
-        const weatherInfo = {
-          location: data.name,
-          time: new Date(new Date().getTime() + data.timezone * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-          temperature: data.main.temp,
-          weather: data.weather[0].description
-        }
+const location = ref('');
+const showInput = ref(true);
+const showHistory = ref(false);
+const history = ref(JSON.parse(localStorage.getItem('weatherHistory')) || []);
 
-        Swal.fire({
-          title: 'Cuaca',
-          html: `
-            <div>Lokasi: ${weatherInfo.location}</div>
-            <div>Waktu: ${weatherInfo.time}</div>
-            <div>Suhu: ${weatherInfo.temperature}°C</div>
-            <div>Cuaca: ${weatherInfo.weather}</div>
-          `,
-          showCancelButton: true,
-          confirmButtonText: 'Simpan',
-          cancelButtonText: 'Batal'
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.history.push(weatherInfo)
-            localStorage.setItem('weatherHistory', JSON.stringify(this.history))
-            Swal.fire('Tersimpan!', '', 'success')
-          }
-        })
-      } catch (error) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Gagal mendapatkan data cuaca. Silakan coba lagi.',
-        })
-        console.error(error)
+const getWeather = async () => {
+  const apiKey = 'e6cdf6e8e4191928c1ca1dce33282002';
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${location.value}&appid=${apiKey}&units=metric`;
+  try {
+    const response = await axios.get(url);
+    const data = response.data;
+    const weatherInfo = {
+      location: data.name,
+      time: new Date(new Date().getTime() + data.timezone * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      temperature: data.main.temp,
+      weather: data.weather[0].description,
+    };
+
+    Swal.fire({
+      title: 'Cuaca',
+      html: `
+        <div>Lokasi: ${weatherInfo.location}</div>
+        <div>Waktu: ${weatherInfo.time}</div>
+        <div>Suhu: ${weatherInfo.temperature}°C</div>
+        <div>Cuaca: ${weatherInfo.weather}</div>
+      `,
+      showCancelButton: true,
+      confirmButtonText: 'Simpan',
+      cancelButtonText: 'Batal',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        history.value.push(weatherInfo);
+        localStorage.setItem('weatherHistory', JSON.stringify(history.value));
+        Swal.fire('Tersimpan!', '', 'success');
       }
-    },
-    deleteHistory(index) {
-      Swal.fire({
-        title: 'Hapus Histori',
-        text: 'Apakah Anda yakin ingin menghapus histori ini?',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Hapus',
-        cancelButtonText: 'Batal'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.history.splice(index, 1)
-          localStorage.setItem('weatherHistory', JSON.stringify(this.history))
-          Swal.fire('Terhapus!', '', 'success')
-        }
-      })
-    }
+    });
+  } catch (error) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: 'Gagal mendapatkan data cuaca. Silakan coba lagi.',
+    });
+    console.error(error);
   }
-}
+};
+
+const deleteHistory = (index) => {
+  Swal.fire({
+    title: 'Hapus Histori',
+    text: 'Apakah Anda yakin ingin menghapus histori ini?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Hapus',
+    cancelButtonText: 'Batal',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      history.value.splice(index, 1);
+      localStorage.setItem('weatherHistory', JSON.stringify(history.value));
+      Swal.fire('Terhapus!', '', 'success');
+    }
+  });
+};
 </script>
 
 <style scoped>
-.svg{
+.svg {
   position: fixed;
   width: 50%;
   top: -40%;
   left: 70%;
   z-index: -1;
 }
-.svg2{
+
+.svg2 {
   position: fixed;
   width: 50%;
   top: 18%;
   left: -10%;
   z-index: -1;
 }
+
 .q-toolbar {
   justify-content: center;
   position: fixed;
@@ -163,17 +160,18 @@ export default {
   left: -1%;
 }
 
-.q-btn{
+.q-btn {
   width: 100px;
   margin-left: 10px;
 }
 
 .q-btn.active {
   color: white;
-  background-color: #4CAF50; 
+  background-color: #4CAF50;
 }
 
-.input-card, .history-title-card {
+.input-card,
+.history-title-card {
   max-width: 400px;
   margin: 20px auto;
   border-radius: 12px;
@@ -189,6 +187,7 @@ export default {
   top: 30%;
   left: 36%;
 }
+
 .inputan {
   margin-top: 30px;
 }
@@ -208,7 +207,7 @@ export default {
   flex-wrap: wrap;
   justify-content: center;
   margin-top: 15%;
-  padding-top: 80px; 
+  padding-top: 80px;
   position: fixed;
 }
 
